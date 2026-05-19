@@ -1,0 +1,13 @@
+{
+  "name": "cipherleaf-backend",
+  "version": "1.0.0",
+  "description": "CipherLeaf API - Backend enkripsi/dekripsi teks",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js"
+  },
+  "keywords": ["cipher", "encryption", "ascii"],
+  "author": "",
+  "license": "MIT"
+}
