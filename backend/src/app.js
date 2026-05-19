@@ -1,15 +1,22 @@
 if (process.env.NODE_ENV !== 'production') require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const helmet = require('helmet');
-const { limiter } = require('./middleware/rateLimiter');
 const routes = require('./routes/cipher.routes');
+
+// Rate limiter - optional, skip jika gagal di serverless
+let limiter;
+try {
+  limiter = require('./middleware/rateLimiter').limiter;
+} catch (e) {
+  console.warn('[WARN] Rate limiter tidak tersedia:', e.message);
+  limiter = (req, res, next) => next(); // fallback: no-op
+}
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ─── Security ─────────────────────────────────────────────────────────────────
-app.use(helmet());
+// ─── Security (skip helmet di serverless untuk menghindari konflik header) ────
+// app.use(helmet()); // dinonaktifkan sementara untuk troubleshooting Vercel
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173').split(',');
